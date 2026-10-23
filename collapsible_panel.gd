@@ -1,19 +1,10 @@
 extends Control
-## Shared behaviour of the BatoEyes panels (the battle card): header drag, a minimize toggle and a
-## smooth height animation. Subclasses draw with draw_body() / full_height() / header_text().
-##
-##   * The toggle is a small "-" / "+" button in the header's right corner, drawn with the game's
-##     section stylebox. A click on it, or a click on the header that did not drag, toggles.
-##   * Minimized = only the header bar (it still carries the key fact: the opponent's name).
-##   * Dragging the header moves the panel; the owner saves position and minimized state.
-##   * The control's rect shrinks with the animation and clips its own drawing, so once minimized
-##     nothing of the panel catches clicks outside the header.
 
 signal minimized_changed(minimized: bool)
 signal moved_by_drag
 
-const HEAD_H := 15.0
-const BTN := 11.0
+const HEAD_H := 10.0
+const BTN := 8.0
 const ANIM_SEC := 0.14
 const DRAG_THRESHOLD := 3.0
 
@@ -91,7 +82,10 @@ func toggle() -> void:
 
 
 func button_rect() -> Rect2:
-	return Rect2(Vector2(size.x - 8 - BTN - 2, 2), Vector2(BTN, BTN))
+	return Rect2(
+		Vector2(size.x - 8 - BTN - 2, (HEAD_H - BTN) * 0.5),
+		Vector2(BTN, BTN)
+	)
 
 
 func _draw() -> void:
@@ -108,9 +102,9 @@ func _draw() -> void:
 	skin.section.draw(ci, b)
 	# pixel glyph: "-" expanded (click to minimize), "+" minimized (click to expand)
 	var c := b.get_center().floor()
-	draw_rect(Rect2(c.x - 3, c.y, 6, 1), skin.INK)
+	draw_rect(Rect2(c.x - 2, c.y, 4, 1), skin.INK)
 	if minimized:
-		draw_rect(Rect2(c.x - 0.0, c.y - 3, 1, 7), skin.INK)
+		draw_rect(Rect2(c.x, c.y - 2, 1, 5), skin.INK)
 
 
 func _gui_input(event) -> void:

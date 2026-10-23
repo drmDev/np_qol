@@ -2,7 +2,7 @@ extends "collapsible_panel.gd"
 ## Simple HUD showing player's HP, Wins, and Day during battle.
 ## Displays as a single line: [Heart] HP [value] | [Badge] Wins [value] | [Sun] Day [value]
 
-const W := 200.0
+const W := 160.0
 const PAD := 5.0
 const ROW := 10.0
 const FS := 8

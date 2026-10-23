@@ -6,7 +6,7 @@ const GROUP := "np_qol_core"
 const CFG_PATH := "user://np_qol.cfg"
 const POLL_SEC := 0.1
 const BATTLE_STATE := "res://game/states/battle_state.gd"
-const PARTS := ["ui_skin.gd", "collapsible_panel.gd", "opponent_hud.gd"]
+const PARTS := ["ui_skin.gd", "collapsible_panel.gd", "player_hud.gd"]
 const DEFAULT_HUD_POS := Vector2(108, 244)
 
 var base_dir := ""
@@ -93,7 +93,7 @@ func _boot_overlay() -> void:
 	layer.name = "NP_QoL_Layer"
 	add_child(layer)
 
-	hud = _sub("opponent_hud.gd").new()
+	hud = _sub("player_hud.gd").new()
 	hud.name = "PlayerHud"
 	hud.setup(skin)
 	hud.position = _on_screen(cfg.get_value("ui", "hud_pos", DEFAULT_HUD_POS), DEFAULT_HUD_POS)
