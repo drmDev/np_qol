@@ -3,17 +3,18 @@ NP_QoL 0.1.0 - Quality of Life Enhancements for Batomon Showdown
 
 What it does
 ------------
-Displays a simple, draggable panel during battles showing:
+Displays a simple, fixed panel during battles showing:
   [Heart Icon] HP [value] | [Badge Icon] Wins [value] | [Sun Icon] Day [value]
 
 The panel appears automatically during battles and shows your current stats.
 No hotkeys needed - it's read-only and doesn't affect your run, saves, or matchmaking.
 
-Usage
------
-- Drag the header to move the panel anywhere on screen
-- Click the header (or the -/+ button) to minimize/expand the panel
-- Your position and minimized state are saved automatically
+Features
+--------
+- Fixed position panel (no dragging or resizing needed)
+- Compact single-line display
+- Uses game's heart icon and custom badge/sun icons
+- Automatically appears during battles
 
 Requirement
 -----------
@@ -30,9 +31,8 @@ Install
 
 Uninstall
 ---------
-Delete the Mods\NP_QoL folder. Your settings are kept in the game's user folder
-(np_qol.cfg); delete that too for a clean slate.
+Delete the Mods\NP_QoL folder.
 
 Files written
 -------------
-user://np_qol.cfg (panel position and minimized state)
+None - this mod does not save any configuration files.

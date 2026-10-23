@@ -3,17 +3,15 @@ extends Node
 const VERSION := "0.1.0"
 const MOD_ID := "np_qol"
 const GROUP := "np_qol_core"
-const CFG_PATH := "user://np_qol.cfg"
 const POLL_SEC := 0.1
 const BATTLE_STATE := "res://game/states/battle_state.gd"
-const PARTS := ["ui_skin.gd", "collapsible_panel.gd", "player_hud.gd"]
+const PARTS := ["ui_skin.gd", "player_hud.gd"]
 const DEFAULT_HUD_POS := Vector2(108, 244)
 
 var base_dir := ""
 var skin
 var layer: CanvasLayer
 var hud
-var cfg := ConfigFile.new()
 var active := false
 var phase := ""
 var off_reason := ""
@@ -54,8 +52,6 @@ func _ready() -> void:
 
 
 func _exit_tree() -> void:
-	if active:
-		_save_cfg()
 	if get_tree().node_added.is_connected(_on_node_added):
 		get_tree().node_added.disconnect(_on_node_added)
 
@@ -69,7 +65,6 @@ func _boot() -> void:
 			print("NP_QoL: another copy is already running (%s) - this one stays idle" % other.get_path())
 			return
 	add_to_group(GROUP)
-	cfg.load(CFG_PATH)
 	_boot_overlay()
 	print("NP_QoL %s loaded (%s)%s" % [VERSION, "Mod Loader" if _from_loader() else "autoload",
 		"" if active else " - overlay off: " + off_reason])
@@ -96,12 +91,12 @@ func _boot_overlay() -> void:
 	hud = _sub("player_hud.gd").new()
 	hud.name = "PlayerHud"
 	hud.setup(skin)
-	hud.position = _on_screen(cfg.get_value("ui", "hud_pos", DEFAULT_HUD_POS), DEFAULT_HUD_POS)
-	hud.set_minimized(bool(cfg.get_value("ui", "hud_minimized", false)), false)
+	hud.position = Vector2(
+		roundf((get_viewport().get_visible_rect().size.x - hud.size.x) * 0.5),
+		DEFAULT_HUD_POS.y
+	)
 	hud.visible = false
 	layer.add_child(hud)
-	hud.minimized_changed.connect(func(_on): _save_cfg())
-	hud.moved_by_drag.connect(_save_cfg)
 
 	get_tree().node_added.connect(_on_node_added)
 
@@ -109,26 +104,6 @@ func _boot_overlay() -> void:
 func _from_loader() -> bool:
 	var p = get_parent()
 	return p != null and p == get_node_or_null("/root/ModLoader")
-
-
-func _save_cfg() -> void:
-	if not active:
-		return
-	cfg.set_value("ui", "hud_pos", hud.position)
-	cfg.set_value("ui", "hud_minimized", hud.minimized)
-	cfg.save(CFG_PATH)
-
-
-static func _on_screen(pos, fallback: Vector2) -> Vector2:
-	if not (pos is Vector2) or not Rect2(Vector2(-40, 0), Vector2(660, 345)).has_point(pos):
-		return fallback
-	return pos
-
-
-func _notification(what: int) -> void:
-	if what in [NOTIFICATION_WM_CLOSE_REQUEST, NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
-		if active and hud.moved:
-			_save_cfg()
 
 
 static func script_is(n, path: String) -> bool:

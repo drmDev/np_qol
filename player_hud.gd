@@ -1,4 +1,4 @@
-extends "collapsible_panel.gd"
+extends Control
 ## Simple HUD showing player's HP, Wins, and Day during battle.
 ## Displays as a single line: [Heart] HP [value] | [Badge] Wins [value] | [Sun] Day [value]
 
@@ -7,30 +7,26 @@ const PAD := 5.0
 const ROW := 10.0
 const FS := 8
 
+var skin
 var info: Dictionary = {}
 
 
 func setup(p_skin) -> void:
-	size = Vector2(W, 30)
-	super(p_skin)
-
-
-func full_height() -> float:
-	return HEAD_H + PAD + ROW + PAD
-
-
-func header_text() -> String:
-	return ""
-
-
-func draw_header_text(r: Rect2) -> void:
-	pass
+	skin = p_skin
+	size = Vector2(W, PAD + ROW + PAD)
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
 func show_info(p_info: Dictionary) -> void:
 	info = p_info
-	_apply_size()
 	queue_redraw()
+
+
+func _draw() -> void:
+	if skin == null:
+		return
+	skin.panel.draw(get_canvas_item(), Rect2(Vector2.ZERO, size))
+	draw_body()
 
 
 static func _base(top: float) -> float:
@@ -42,7 +38,7 @@ func draw_body() -> void:
 		return
 	
 	var x := PAD + 2
-	var y := HEAD_H + PAD
+	var y := PAD
 	var baseline := _base(y)
 	var cursor_x := x
 	var font: Font = skin.font_text
