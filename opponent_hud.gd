@@ -23,6 +23,10 @@ func header_text() -> String:
 	return ""
 
 
+func draw_header_text(r: Rect2) -> void:
+	pass
+
+
 func show_info(p_info: Dictionary) -> void:
 	info = p_info
 	_apply_size()
