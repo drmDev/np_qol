@@ -1,0 +1,8 @@
+{
+	"id": "np_qol",
+	"name": "NP_QoL",
+	"version": "0.1.0",
+	"author": "NescapePlan",
+	"description": "Quality of Life enhancements - displays player HP, Wins, and Day during battle",
+	"settings": []
+}
